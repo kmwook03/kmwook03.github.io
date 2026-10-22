@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="김민욱 포트폴리오">
+  <meta name="theme-color" content="#F5F5F5">
+  <title>김민욱</title>
+  <style>
+    :root { --paper: #F5F5F5; --surface: #FFFFFF; --ink: #262626; --muted: #666666; --accent: #404040; --line: #DEDEDE; --soft: #F0F0F0; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.7; word-break: keep-all; }
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a:focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
+    ::selection { background: var(--accent); color: var(--paper); }
+    .wrap { width: min(1120px, calc(100% - 96px)); margin-inline: auto; }
+    .mono { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 11px; letter-spacing: .1em; }
+    .skip { position: fixed; top: -80px; left: 20px; background: var(--accent); color: var(--paper); padding: 10px 20px; z-index: 10; }
+    .skip:focus { top: 12px; }
+    [aria-disabled="true"] { color: var(--muted); }
+    .profile-layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); align-items: stretch; gap: 24px; padding: 32px 0 40px; }
+    .profile-card, .about-panel { min-width: 0; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+    .profile-card { padding: 24px; }
+    .profile-identity { display: flex; align-items: flex-start; gap: 16px; }
+    .profile-details { min-width: 0; }
+    h1 { color: var(--ink); font-size: 25px; letter-spacing: -.05em; line-height: 1.35; font-weight: 650; margin: 0 0 7px; overflow-wrap: anywhere; }
+    .profile-school, .profile-major { color: var(--muted); font-size: 12px; margin: 0; }
+    .school-logo { display: block; width: 148px; max-width: 100%; height: auto; margin: 6px 0; padding: 5px; border-radius: 4px; background: var(--surface); }
+    .profile-contacts { display: grid; gap: 5px; margin-top: 10px; font-size: 11px; line-height: 1.5; }
+    .profile-contacts p { margin: 0; }
+    .contact-label { display: block; color: var(--muted); font-size: 10px; }
+    .profile-contacts a { color: var(--accent); overflow-wrap: anywhere; }
+    .profile-contacts a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    .profile-github { display: flex; margin-top: 20px; }
+    .profile-github .button { width: 100%; min-height: 38px; padding: 7px 12px; font-size: 12px; }
+    .about-panel { padding: 28px; }
+    .about-panel .section-head { margin-bottom: 18px; }
+    .about-panel h2 { font-size: 23px; }
+    .intro { color: var(--ink); font-size: 15px; font-weight: 500; white-space: pre-line; margin: 0 0 12px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+    .button { display: inline-flex; justify-content: center; align-items: center; gap: 22px; min-height: 46px; padding: 10px 20px; font-size: 13px; border: 1px solid var(--line); border-radius: 4px; }
+    .button.primary { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+    a.button:hover { transform: translateY(-2px); }
+    .portrait { position: relative; margin: 0; width: 80px; flex-shrink: 0; }
+    .portrait-media { aspect-ratio: 1; position: relative; overflow: hidden; background: var(--paper); border-radius: 50%; border: 1px solid var(--line); }
+    .portrait-media > svg { width: 100%; height: 100%; display: block; }
+    .portrait-media img { position: absolute; inset: 0; height: 100%; width: 100%; object-fit: cover; object-position: center 30%; }
+    .portrait-media img[hidden] { display: none; }
+    .section { padding: 65px 0; border-top: 1px solid var(--line); }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 30px; }
+    .section-kicker { color: var(--muted); margin: 0 0 8px; }
+    h2 { font-size: 29px; letter-spacing: -.055em; line-height: 1.4; margin: 0; font-weight: 650; }
+    .section-note { color: var(--muted); font-size: 13px; margin: 0; }
+    .about-copy { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.85; white-space: pre-line; }
+    .interests-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
+    .interests-section h3 { font-size: 15px; margin-bottom: 12px; }
+    .interest-grid { display: grid; gap: 12px; }
+    .interest { display: grid; grid-template-columns: 22px 1fr; gap: 2px 10px; align-items: baseline; }
+    .interest-number { grid-row: span 2; color: var(--muted); font-size: 10px; }
+    h3 { margin: 0; font-size: 19px; font-weight: 600; letter-spacing: -.035em; }
+    .interest h4 { margin: 0; font-size: 13px; font-weight: 600; }
+    .interest p { color: var(--muted); font-size: 12px; margin: 0; }
+    .skills-section { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+    .skills-section h2 { font-size: 15px; margin-bottom: 14px; }
+    .stack { display: grid; gap: 15px; }
+    .stack-row { display: grid; gap: 7px; }
+    .stack-row h3 { color: var(--muted); font-size: 11px; font-weight: 500; }
+    .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag { display: inline-block; padding: 5px 12px; border-radius: 4px; background: var(--soft); color: var(--accent); font-size: 12px; overflow-wrap: anywhere; }
+    .tag.placeholder { color: var(--muted); background: transparent; border: 1px dashed var(--line); }
+    .stack .tags { gap: 6px; }
+    .stack .tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px; font-size: 11px; }
+    .skill-icon { display: inline-flex; flex-shrink: 0; width: 21px; height: 21px; padding: 2px; border-radius: 4px; background: var(--surface); }
+    .skill-icon svg { width: 100%; height: 100%; }
+    .projects { display: grid; gap: 20px; }
+    .project { display: grid; grid-template-columns: 175px 1fr auto; gap: 30px; align-items: center; padding: 25px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); }
+    .project-art { position: relative; display: grid; place-items: center; aspect-ratio: 1.3; background: var(--paper); color: var(--accent); overflow: hidden; }
+    .project-art svg { width: 75px; height: 75px; }
+    .project-index { position: absolute; top: 8px; left: 10px; opacity: .7; font-size: 9px; }
+    .project h3 { margin-bottom: 8px; }
+    .project-kind { display: inline-block; margin-bottom: 9px; padding: 2px 8px; border: 1px solid var(--line); border-radius: 3px; color: var(--muted); font-size: 10px; }
+    .project p { color: var(--muted); font-size: 13px; margin: 0 0 14px; max-width: 500px; }
+    .project .publication-meta { font-size: 11px; margin-bottom: 10px; }
+    .project .tag { font-size: 10px; padding: 3px 9px; }
+    .project-link { font-size: 12px; white-space: nowrap; align-self: start; }
+    .github-link, .publication-link { display: inline-flex; align-items: center; gap: 7px; }
+    .github-icon, .dbpia-icon { display: inline-flex; flex-shrink: 0; width: 16px; height: 16px; }
+    .dbpia-icon { object-fit: contain; }
+    .github-icon svg { display: block; width: 100%; height: 100%; }
+    a.project-link:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 5px; }
+    .contact { padding: 45px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 28px; margin: 10px 0 60px; border-radius: 5px; }
+    .contact .mono { color: var(--muted); margin: 0 0 12px; }
+    .contact h2 { font-size: 26px; }
+    .contact p { margin: 9px 0 0; color: var(--muted); font-size: 13px; }
+    .contact .button { background: var(--paper); border-color: var(--line); color: var(--accent); flex-shrink: 0; }
+    .contact [aria-disabled] { color: var(--muted); }
+    footer { border-top: 1px solid var(--line); padding: 23px 0; color: var(--muted); font-size: 11px; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 20px; }
+    footer p { margin: 0; }
+    .empty-note { color: var(--muted); font-size: 13px; }
+    @media (max-width: 900px) {
+      .wrap { width: calc(100% - 56px); }
+      .profile-layout { grid-template-columns: 260px minmax(0, 1fr); gap: 20px; }
+      .profile-card, .about-panel { padding: 20px; }
+      .profile-identity { gap: 12px; }
+      .portrait { width: 64px; }
+      .project { grid-template-columns: 125px 1fr; gap: 22px; }
+      .project-link { grid-column: 2; margin-top: -8px; }
+      .project-art { grid-row: span 2; }
+    }
+    @media (max-width: 700px) {
+      .profile-layout { grid-template-columns: 1fr; padding-top: 22px; }
+      .portrait { width: 72px; }
+    }
+    @media (max-width: 600px) {
+      .wrap { width: calc(100% - 40px); }
+      h1 { font-size: 24px; }
+      .section { padding: 42px 0; }
+      .section-head { align-items: start; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+      h2 { font-size: 25px; }
+      .project { grid-template-columns: 1fr; gap: 20px; padding: 20px; }
+      .project-art { aspect-ratio: 2.5; grid-row: auto; }
+      .project-link { grid-column: auto; margin-top: 0; }
+      .contact { padding: 28px; flex-direction: column; align-items: start; margin-bottom: 36px; }
+      .contact h2 { font-size: 24px; }
+      .footer-inner { flex-direction: column; gap: 4px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; } a.button:hover { transform: none; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">본문 바로가기</a>
+  <main id="main" class="wrap">
+    <div class="profile-layout">
+      <aside class="profile-card" aria-labelledby="profile-name">
+        <div class="profile-identity">
+        <figure class="portrait">
+          <div class="portrait-media">
+            <svg id="photo-placeholder" viewBox="0 0 400 435" role="img" aria-label="본인 사진을 추가할 자리">
+              <defs><pattern id="grid" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" fill="none" stroke="#b9c6b1" stroke-width=".65"/></pattern></defs>
+              <rect width="400" height="435" fill="#dfe5d9"/><rect width="400" height="435" fill="url(#grid)"/>
+              <circle cx="200" cy="202" r="134" fill="#f2f1e6"/>
+              <path d="M68 435v-53c0-71 58-126 132-126s132 55 132 126v53" fill="#91a58c"/>
+              <path d="M162 254v39c0 29 76 29 76 0v-39" fill="#b3bea7"/>
+              <ellipse cx="200" cy="192" rx="66" ry="79" fill="#bac6af"/>
+              <path d="M133 187c-9-65 27-104 73-104 52 0 72 42 61 109l-17-32c-32 8-65 0-80-18z" fill="#506e55"/>
+              <path d="M25 48V25h23M352 25h23v23M375 387v23h-23M48 410H25v-23" fill="none" stroke="#506e55" stroke-width="2"/>
+            </svg>
+            <img id="profile-photo" alt="프로필 사진" hidden decoding="async">
+          </div>
+          <figcaption class="sr-only" id="photo-caption">사진 준비 중</figcaption>
+        </figure>
+          <div class="profile-details">
+            <h1 id="profile-name" data-name>이름 입력</h1>
+            <p class="profile-school" id="school">학교명 입력</p>
+            <p class="profile-major" id="major">전공명 입력</p>
+            <div class="profile-contacts" aria-label="연락처 및 블로그">
+              <p><span class="contact-label">메일</span><span id="contact-email" aria-disabled="true">이메일 입력 예정</span></p>
+              <p><span class="contact-label">블로그</span><span id="contact-blog" aria-disabled="true">블로그 입력 예정</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="profile-github"><span class="button" data-github aria-disabled="true">GitHub 입력 예정 ↗</span></div>
+        <section class="skills-section" id="skills" aria-labelledby="skills-title">
+          <h2 id="skills-title">기술 스택</h2>
+          <div class="stack" id="skill-list"></div>
+        </section>
+      </aside>
+      <section class="about-panel" id="about" aria-labelledby="about-title">
+        <div class="section-head"><div><h2 id="about-title">안녕하세요, 김민욱입니다.</h2></div></div>
+        <p class="about-copy" id="about-copy">자기소개 적는 칸.</p>
+        <section class="interests-section" id="interests" aria-labelledby="interests-title">
+          <h3 id="interests-title">관심사</h3>
+          <div class="interest-grid" id="interest-list"></div>
+        </section>
+      </section>
+    </div>
+    <section class="section" id="projects" aria-labelledby="projects-title">
+      <div class="section-head"><div><h2 id="projects-title">프로젝트 및 연구</h2></div></div>
+      <div class="projects" id="project-list"></div>
+    </section>
+  </main>
+  <footer><div class="wrap footer-inner"><p>© <span id="year">2026</span> <span data-name>나의 포트폴리오</span>. </p><a href="#main">맨 위로 ↑</a></div></footer>
+  <noscript><p class="wrap empty-note">관심사·기술 스택·프로젝트 및 연구 목록을 보려면 브라우저에서 JavaScript를 활성화해주세요.</p></noscript>
+
+  <!-- JSON 값 수정 -> 페이지 전체에 반영 -->
+  <!-- photo에는 사진의 data URL 또는 index.html 기준 상대 경로를 입력 -->
+  <script id="profile-data" type="application/json">
+  {
+    "name": "김민욱",
+    "school": "부산대학교",
+    "schoolLogo": "signature04.png",
+    "major": "정보컴퓨터공학부",
+    "email": "mw700972@gmail.com",
+    "blog": "https://menook.tistory.com/",
+    "about": "소프트웨어와 하드웨어의 상호작용에 흥미를 느껴 컴퓨터 시스템과 임베디드 시스템을 공부하기 시작했습니다. 코드 한 줄의 실수가 큰 사고로 이어질 수 있는 임베디드 소프트웨어의 특성을 이해하고, 안정성과 성능을 함께 고려하는 개발자가 되고자 합니다.",
+    "photo": "students/202255521/images/MinWook.jpg",
+    "github": "https://github.com/kmwook03",
+    "interests": [
+      { "title": "Operating Systems", "description": "컴퓨터가 하드웨어 자원을 관리하는 과정을 깊이 이해하고 싶어 운영체제 공부를 시작했습니다. xv6와 Haribote OS를 통해 기본 작동 원리를 익혔고, 이를 응용해 실제 하드웨어에서 실행되는 자체 운영체제를 개발했습니다. 커널의 구조와 자원 관리 방식을 살펴보며, 시스템의 안정성과 성능을 함께 고민하는 데 관심이 있습니다." },
+      { "title": "Embedded Systems", "description": "소프트웨어로 물리 장치를 제어하고, 작성한 코드가 실제 동작으로 이어지는 과정에 흥미를 느낍니다. STM32와 Raspberry Pi를 활용해 다양한 임베디드 시스템을 만들며 공부하고 있습니다. 하드웨어의 특성과 제한된 자원을 고려해 소프트웨어를 설계하고, 센서와 주변 장치를 안정적으로 연결하는 방법을 더 깊이 배우고자 합니다." },
+      { "title": "Physical AI", "description": "인공지능을 물리적인 시스템과 결합해 환경을 인식하고 상황에 맞게 동작하는 시스템을 만들고자 합니다. 센서로 얻은 정보를 바탕으로 판단하고, 그 결과가 실제 장치의 움직임으로 이어지는 과정에 관심이 있습니다. 모델의 정확도뿐 아니라 응답 속도와 하드웨어의 제약도 함께 고려하며, 실제 환경에서 유용하게 작동하는 지능형 시스템을 구현해 보고 싶습니다." }
+    ],
+    "skills": [
+      { "category": "Languages", "items": ["C/C++", "Python"] },
+      { "category": "Systems & Platforms", "items": ["Linux", "eBPF", "ROS 2"] },
+      { "category": "Development Tools", "items": ["GNU Binutils", "QEMU", "CMake"] },
+      { "category": "Hardware & Embedded", "items": ["Raspberry Pi 5", "STM32"] }
+    ],
+    "projects": [
+      {
+        "name": "Mowkow OS 64",
+        "description": "32비트 교육용 한글 운영체제를 x86-64로 확장한 프로젝트입니다. 기존 교육용 운영체제가 32비트에 ASCII 출력만 제공한다는 점을 극복하여 한국 학생들을 위한 교육용 운영체제를 만들고자 시작한 프로젝트입니다. 한글 입출력, FAT32 파일 시스템, GUI와 다중 콘솔, MicroPython·머꼬 실행 환경을 제공하며, Raspberry Pi 5용 AArch64 포트를 개발하여 실제 Raspberry Pi 5 기기에서 실행할 수 있습니다.",
+        "stack": ["C", "Assembly", "QEMU", "MicroPython"],
+        "github": "https://github.com/kmwook03/Mowkow-OS-64"
+      },
+      {
+        "name": "FILE-EdoTensei",
+        "description": "Linux 환경에서 동작하는 C++17 기반 파일 복구 도구입니다. Aho–Corasick 알고리즘으로 파일 시그니처를 탐색하고 JPEG·PNG·PDF의 구조를 검증합니다. NTFS 메타데이터를 활용한 복구와 JSON Lines 형식의 결과 보고서를 지원합니다.",
+        "stack": ["C++17", "Linux", "CMake", "Python"],
+        "github": "https://github.com/kmwook03/FILE-EdoTensei"
+      },
+      {
+        "name": "Linux Kernel Deep Dive",
+        "description": "eBPF와 XDP를 활용해 Linux 커널의 동작과 성능을 실험적으로 분석하는 프로젝트입니다. WSL2와 Raspberry Pi 5에서 스케줄러·페이지 폴트·네트워크·인터럽트를 관측하고, 메모리 정책과 하드웨어 자원이 성능에 미치는 영향을 비교했습니다.",
+        "stack": ["C", "Python", "Linux", "eBPF", "XDP"],
+        "github": "https://github.com/kmwook03/kernel-deep-dive"
+      }
+    ],
+    "publications": [
+      {
+        "title": "한글 함수형 프로그래밍 언어 머꼬를 활용한 한글 운영체제 구현",
+        "authors": "김민욱, 김영훈, 우균",
+        "role": "제1저자",
+        "venue": "대한전자공학회 하계종합학술대회 논문집",
+        "year": "2026.06",
+        "pages": "1258–1261",
+        "description": "한글 입출력과 GNU 텍스트 편집기·머꼬 인터프리터를 갖춘 교육용 운영체제 Mowkow OS를 제안했습니다. 머꼬의 내장 함수만으로 부트로더 기계어를 생성하고, SHA-256 해시 비교로 생성 결과의 일치를 확인해 한글 기반 시스템 프로그래밍의 가능성을 검증했습니다.",
+        "url": "https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE12992377"
+      }
+    ]
+  }
+  </script>
+  <script>
+    'use strict';
+    const profile = JSON.parse(document.getElementById('profile-data').textContent);
+    const setText = (id, value) => { if (value) document.getElementById(id).textContent = value; };
+    const element = (tag, className, text) => {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    };
+    function githubUrl(value) {
+      try {
+        const url = new URL(value);
+        return url.protocol === 'https:' && url.hostname === 'github.com' && !url.username && !url.password ? url.href : null;
+      } catch { return null; }
+    }
+    function githubLink(value, className, label) {
+      const url = githubUrl(value);
+      const node = element(url ? 'a' : 'span', `${className} github-link`);
+      const icon = element('span', 'github-icon');
+      icon.setAttribute('aria-hidden', 'true');
+      icon.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M12 0C5.37 0 0 5.373 0 12c0 5.302 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.043-1.61-4.043-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.838 1.237 1.838 1.237 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.536-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.52 11.52 0 0 1 12 5.803c1.02.005 2.047.138 3.004.404 2.291-1.552 3.297-1.23 3.297-1.23.655 1.652.243 2.873.12 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.898-.015 3.293 0 .322.216.694.825.576C20.565 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12Z"/></svg>';
+      node.append(icon, element('span', '', url ? label : 'GitHub 입력 예정 ↗'));
+      if (url) { node.href = url; node.target = '_blank'; node.rel = 'noopener noreferrer'; }
+      else node.setAttribute('aria-disabled', 'true');
+      return node;
+    }
+    if (profile.name) {
+      document.querySelectorAll('[data-name]').forEach(node => { node.textContent = profile.name; });
+      document.title = `${profile.name} · Portfolio`;
+    }
+    setText('intro', profile.intro);
+    setText('about-copy', profile.about);
+    setText('school', profile.school);
+    if (profile.schoolLogo) {
+      const logo = element('img', 'school-logo');
+      logo.alt = profile.school || '학교 로고';
+      logo.decoding = 'async';
+      logo.addEventListener('load', () => { document.getElementById('school').replaceChildren(logo); });
+      logo.src = profile.schoolLogo;
+    }
+    setText('major', profile.major);
+    const email = (profile.email || '').trim();
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      const link = element('a', '', email);
+      link.href = 'mailto:' + encodeURIComponent(email).replace('%40', '@');
+      document.getElementById('contact-email').replaceChildren(link);
+      document.getElementById('contact-email').removeAttribute('aria-disabled');
+    }
+    try {
+      const blog = new URL(profile.blog);
+      if (['https:', 'http:'].includes(blog.protocol) && !blog.username && !blog.password) {
+        const link = element('a', '', '블로그 방문하기 ↗');
+        link.href = blog.href;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.setAttribute('aria-label', '블로그 방문하기 (새 탭)');
+        document.getElementById('contact-blog').replaceChildren(link);
+        document.getElementById('contact-blog').removeAttribute('aria-disabled');
+      }
+    } catch { /* 주소가 없거나 올바르지 않으면 입력 예정 문구를 유지합니다. */ }
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.querySelectorAll('[data-github]').forEach(node => {
+      node.replaceWith(githubLink(profile.github, node.className, 'GitHub 방문하기 ↗'));
+    });
+    if (profile.photo) {
+      const photo = document.getElementById('profile-photo');
+      photo.alt = profile.name ? `${profile.name}의 프로필 사진` : '프로필 사진';
+      photo.addEventListener('load', () => {
+        photo.hidden = false;
+        document.getElementById('photo-placeholder').style.visibility = 'hidden';
+        setText('photo-caption', profile.name || '프로필 사진');
+      });
+      photo.addEventListener('error', () => { photo.hidden = true; setText('photo-caption', '사진을 불러올 수 없습니다'); });
+      photo.src = profile.photo;
+    }
+    const interests = profile.interests.length ? profile.interests : [
+      { title: '첫 번째 관심사', description: '관심 있는 분야와 그 분야에 흥미를 느낀 이유를 적어주세요.' },
+      { title: '두 번째 관심사', description: '최근 공부하고 있거나 더 깊이 알아보고 싶은 주제를 소개해주세요.' },
+      { title: '세 번째 관심사', description: '기술 외에 좋아하는 취미나 일상의 관심사를 적어도 좋아요.' }
+    ];
+    interests.forEach((item, index) => {
+      const article = element('article', 'interest');
+      article.append(element('span', 'interest-number mono', String(index + 1).padStart(2, '0')), element('h4', '', item.title));
+      if (item.description) article.append(element('p', '', item.description));
+      document.getElementById('interest-list').append(article);
+    });
+    const skills = profile.skills.length ? profile.skills : [
+      { category: 'Languages', items: ['사용하는 프로그래밍 언어'] },
+      { category: 'Frameworks & Libraries', items: ['사용하는 프레임워크와 라이브러리'] },
+      { category: 'Tools & Platforms', items: ['개발 도구와 플랫폼'] }
+    ];
+    // HTML에 포함한 SVG 아이콘으로 외부 서비스 없이 기술 배지를 표시합니다.
+    const skillIcons = {
+      'ROS 2': '<svg viewBox="0 0 32 32" fill="#22314e"><circle cx="7" cy="7" r="3"/><circle cx="16" cy="7" r="3"/><circle cx="25" cy="7" r="3"/><circle cx="7" cy="16" r="3"/><circle cx="16" cy="16" r="3"/><circle cx="25" cy="16" r="3"/><circle cx="7" cy="25" r="3"/><circle cx="16" cy="25" r="3"/><circle cx="25" cy="25" r="3"/></svg>',
+      'C/C++': '<svg viewBox="0 0 32 32" fill="none"><path d="M16 1 29 8.5v15L16 31 3 23.5v-15Z" fill="#32699a"/><path d="M18 10.7a7 7 0 1 0 0 10.6" stroke="#fff" stroke-width="3"/><path d="M22 13v6m-3-3h6m3-3v6m-3-3h6" stroke="#fff" stroke-width="1.6"/></svg>',
+      'Python': '<svg viewBox="0 0 32 32"><path d="M16 2c-7 0-7 2-7 6v3h8v2H6c-5 0-5 13 0 13h3v-5c0-3 2-5 5-5h8c3 0 4-2 4-5V8c0-4-3-6-10-6Z" fill="#3776ab"/><path d="M16 30c7 0 7-2 7-6v-3h-8v-2h11c5 0 5-13 0-13h-3v5c0 3-2 5-5 5h-8c-3 0-4 2-4 5v3c0 4 3 6 10 6Z" fill="#ffd343"/><circle cx="12" cy="7" r="1.3" fill="#fff"/><circle cx="20" cy="25" r="1.3" fill="#fff"/></svg>',
+      'Linux': '<svg viewBox="0 0 32 32"><path d="M9 12C9 1 23 1 23 12l3 10c2 7-22 7-20 0Z" fill="#292d32"/><ellipse cx="16" cy="21" rx="7" ry="8" fill="#fafafa"/><ellipse cx="13" cy="10" rx="2.4" ry="3.2" fill="#fff"/><ellipse cx="19" cy="10" rx="2.4" ry="3.2" fill="#fff"/><circle cx="13.5" cy="10.5" r="1" fill="#292d32"/><circle cx="18.5" cy="10.5" r="1" fill="#292d32"/><path d="m12 14 4-3 4 3-4 3Z" fill="#edb536"/><path d="m4 26 7-2 3 5-9 1Zm24 0-7-2-3 5 9 1Z" fill="#edb536"/></svg>',
+      'eBPF': '<svg viewBox="0 0 32 32" fill="none"><rect x="8" y="8" width="16" height="16" rx="3" fill="#b87919"/><path d="M12 3v5m8-5v5m-8 16v5m8-5v5M3 12h5m-5 8h5m16-8h5m-5 8h5" stroke="#b87919" stroke-width="2"/><path d="m15 11-3 6h5l-2 5 6-8h-5l2-3" fill="#fff"/></svg>',
+      'GNU Binutils': '<svg viewBox="0 0 32 32" fill="none"><path d="M19 4a8 8 0 0 0-8 10L3 22a4 4 0 0 0 6 6l8-8A8 8 0 0 0 27 9l-6 6-5-5 6-6Z" fill="#79528a"/><circle cx="7" cy="25" r="1.5" fill="#fff"/></svg>',
+      'QEMU': '<svg viewBox="0 0 32 32" fill="none"><rect x="3" y="4" width="26" height="20" rx="3" fill="#d77b29"/><path d="M12 28h8m-4-4v4M9 10l4 4-4 4m7 0h7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 28h8m-4-4v4" stroke="#d77b29" stroke-width="2"/></svg>',
+      'CMake': '<svg viewBox="0 0 32 32"><path d="M16 2 2 29l12-9Z" fill="#387bb2"/><path d="m16 2 2 18 12 9Z" fill="#c64747"/><path d="m14 22-12 7h28l-12-7Z" fill="#4b9859"/></svg>',
+      'Raspberry Pi 5': '<svg viewBox="0 0 32 32" fill="none"><rect x="3" y="5" width="26" height="22" rx="3" fill="#467b48"/><rect x="10" y="10" width="11" height="11" rx="1" fill="#293b33"/><path d="M7 8h18" stroke="#d8c57c" stroke-width="2" stroke-dasharray="1 2"/><path d="M25 13h6v5h-6Zm0 7h6v5h-6Z" fill="#c5ceca"/><rect x="8" y="25" width="8" height="5" rx="1" fill="#c5ceca"/><circle cx="6" cy="23" r="1" fill="#d8c57c"/></svg>',
+      'STM32': '<svg viewBox="0 0 32 32" fill="none"><rect x="8" y="8" width="16" height="16" rx="2" fill="#28729b"/><path d="M11 3v5m5-5v5m5-5v5M11 24v5m5-5v5m5-5v5M3 11h5m-5 5h5m-5 5h5m16-10h5m-5 5h5m-5 5h5" stroke="#28729b" stroke-width="2"/><path d="m11 16 3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    };
+    skills.forEach(group => {
+      const row = element('div', 'stack-row');
+      const tags = element('div', 'tags');
+      group.items.forEach(item => {
+        const tag = element('span', profile.skills.length ? 'tag' : 'tag placeholder');
+        if (Object.hasOwn(skillIcons, item)) {
+          const icon = element('span', 'skill-icon');
+          icon.setAttribute('aria-hidden', 'true');
+          icon.innerHTML = skillIcons[item];
+          tag.append(icon);
+        }
+        tag.append(element('span', '', item));
+        tags.append(tag);
+      });
+      row.append(element('h3', '', group.category), tags);
+      document.getElementById('skill-list').append(row);
+    });
+    const projects = profile.projects.length ? profile.projects : [
+      { name: '첫 번째 프로젝트', description: '프로젝트가 해결하려는 문제, 주요 기능, 내가 맡은 역할을 간단히 소개해주세요.', stack: ['사용 기술'], github: '' },
+      { name: '두 번째 프로젝트', description: '직접 만들며 배운 점이나 구현 과정에서 기억에 남는 경험을 소개해주세요.', stack: ['사용 기술'], github: '' }
+    ];
+    projects.forEach((item, index) => {
+      const article = element('article', 'project');
+      const art = element('div', 'project-art');
+      art.setAttribute('aria-hidden', 'true');
+      // 고정된 장식만 SVG로 작성하며, 사용자 입력은 textContent로 처리합니다.
+      art.innerHTML = '<svg viewBox="0 0 80 80" fill="none"><rect x="8" y="14" width="64" height="52" rx="4" stroke="currentColor" stroke-width="2"/><path d="M8 26h64M29 38l-9 8 9 8m22-16 9 8-9 8m-8-19-6 22" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="20" r="1.5" fill="currentColor"/><circle cx="21" cy="20" r="1.5" fill="currentColor"/></svg>';
+      art.append(element('span', 'project-index mono', 'PROJECT / ' + String(index + 1).padStart(2, '0')));
+      const body = element('div', 'project-body');
+      const tags = element('div', 'tags');
+      (item.stack || []).forEach(tech => tags.append(element('span', 'tag', tech)));
+      body.append(element('h3', '', item.name), element('p', '', item.description), tags);
+      const link = githubLink(item.github, 'project-link', 'GitHub ↗');
+      if (link.tagName === 'A') link.setAttribute('aria-label', `${item.name} GitHub 저장소 (새 탭)`);
+      article.append(art, body, link);
+      document.getElementById('project-list').append(article);
+    });
+    (profile.publications || []).forEach((paper, index) => {
+      const article = element('article', 'project publication');
+      const art = element('div', 'project-art');
+      art.setAttribute('aria-hidden', 'true');
+      art.innerHTML = '<svg viewBox="0 0 80 80" fill="none"><path d="M19 8h29l13 14v50H19Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M48 8v15h13M28 34h24M28 42h24M28 50h24M28 58h15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+      art.append(element('span', 'project-index mono', 'PAPER / ' + String(index + 1).padStart(2, '0')));
+      const body = element('div', 'project-body');
+      const title = paper.title || '논문 제목 입력 예정';
+      const metadata = [paper.authors, paper.venue, paper.year, paper.pages ? `pp. ${paper.pages}` : ''].filter(Boolean).join(' · ');
+      body.append(
+        element('span', 'project-kind', paper.role ? `논문 · ${paper.role}` : '논문'),
+        element('h3', '', title),
+        element('p', 'publication-meta', metadata || '저자 · 학회·학술지 · 발표 연도 입력 예정'),
+        element('p', '', paper.description || '연구 주제와 핵심 결과, 본인이 기여한 내용을 간단히 소개해주세요.')
+      );
+      let paperUrl = null;
+      try {
+        const url = new URL(paper.url);
+        if (['https:', 'http:'].includes(url.protocol) && !url.username && !url.password) paperUrl = url.href;
+      } catch { /* 논문 주소를 입력하기 전에는 링크를 비활성 상태로 표시합니다. */ }
+      const link = element(paperUrl ? 'a' : 'span', 'project-link publication-link');
+      if (paperUrl && /(^|\.)dbpia\.co\.kr$/.test(new URL(paperUrl).hostname)) {
+        const icon = element('img', 'dbpia-icon');
+        icon.alt = '';
+        icon.setAttribute('aria-hidden', 'true');
+        // DBpia 공식 favicon을 포함해 외부 이미지 요청 없이 표시합니다.
+        icon.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADr0lEQVR4nO2Wf0xVZRjHP+97LhcJLigOQ8DMsX4goqugOSknYSht0Q/WHJszZ8xq06i5fm2trTWXc2ulK82ttWWpRQg1wrZWakguDTapdu+6/GgFkiD3Xu6Vy72Hc885/XHhXEiuuP6QP7rvP+d53vM+z/fzPu973vOKQCDwm8PhKOQGN13X9Z6enp3CNE3zRotPtmAweGVOATRNi8i5Ep9sCYAEwJwD2P7d4XW6UAMBhKIAIKS0nkJKEAKpKKTl5pA8f/602LDXy9CFC7OKCiHJvrcE7HamnQO6qnKkeDWq3z87eUoKd9ftZNWzT4MQAJzfs5fOAx/MGgvgWJLHhk8+jkyrwF/fn7wucYBIKMT5PXuRNhtF22sxNA13fQMAyRkZ3FW3IzrQBNMwrLjupi/xOF1c6eun491905eg63iTZa8/dIC0nJyrhI1IhHO732KwvQOAzoOHWFG7jT+//Y7Q8DAAd9Rsoqj2qRnBTV3H43RNTCIcAwh7vPSd/gGAzIICllVujDv74l0v0FKzGYCQx4M2Oorr6DEApKJQ+OSWuLEep9Oyb3+iOvYV9DQ3Y2ha9EX1Y3ETAAibYtlJaamEPF4GfjwLwNINFaTlXl05gMH2DnpbvgHgzppNLClbF6vAZPmFopD/aNU1AS62nbXsvLVrcX/RYK1z36nTHClejVAUpCIRioJpmAgpCQ0PY+o6+Y9UUbr7TXTTjAKMdHVzufOXiYT3c9OiRXHFw14frsOfTpRCULh1Cyd31EVdKUnOyABMdFVFnxKn+v2YerQnv+phpM2GrmlRgK7G2Oa7rfrxuOL6+DinnnuesM8HwLKHKlF9I4wNDUX9yo2UH3xvxtjWF1/h98/rAQhdHrL6pWkYdDd9BYA9PZ1bK9bPmMDf+wcnajbT33oGgHmZmax543Vcxz6zxqzYtjUuvGK3x0STYrbt75/OMTowAIAjLxf38UaEnNhkpkHY6+PSz+30t56xSijtdsrf348+Ps7FCaCslUXcXFI8o7g64qe35YTlL1xeEAPoami0HI/TRdurr8WdBYA93cED+/eRU7qG9rffsTZfSlYWv374EVJKkBIhBTIpCSEVepu/Juz1ApB7XykLC5db+cThVfeYWjB4TVGA1MXZ3FJWxspntpO6OBtT16lfV07w0uCssQDzFixgacWDlLy0C3t6OgDjqhoRhq5f151w8qc0tU09Yv9LvBociyQupQmABMD/G8AwDF36fL62uRBXVXXM7Xa//A8H3m6OXTZTdQAAAABJRU5ErkJggg==';
+        link.append(icon);
+      }
+      link.append(element('span', '', paperUrl ? '논문 보기 ↗' : '논문 링크 입력 예정 ↗'));
+      if (paperUrl) {
+        link.href = paperUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.setAttribute('aria-label', `${title} 논문 보기 (새 탭)`);
+      } else link.setAttribute('aria-disabled', 'true');
+      article.append(art, body, link);
+      document.getElementById('project-list').append(article);
+    });
+  </script>
+</body>
+</html>
