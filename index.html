@@ -229,14 +229,14 @@
         "name": "FILE-EdoTensei",
         "screenshot": "",
         "screenshotAlt": "",
-        "description": "Linux 환경에서 동작하는 C++17 기반 파일 복구 도구입니다. Aho–Corasick 알고리즘으로 파일 시그니처를 탐색하고 JPEG·PNG·PDF의 구조를 검증합니다. NTFS 메타데이터를 활용한 복구와 JSON Lines 형식의 결과 보고서를 지원합니다.",
+        "description": "USB 디스크 이미지의 삭제된 JPEG, PNG, PDF 파일을 복구하는 C++17 기반 포렌식 도구입니다. Aho–Corasick 알고리즘으로 여러 파일 시그니처를 한 번의 순차 스캔으로 탐색하고, 파일별 구조와 PNG CRC, PDF 교차 참조 정보를 검증하도록 설계했습니다. 시그니처 기반의 raw carving과 NTFS의 MFT 메타데이터 기반 복구를 결합하여 NTFS 데이터 런을 해석해 조각난 파일과 희소 영역을 처리할 수 있습니다.",
         "stack": ["C++17", "Linux", "CMake", "Python"],
         "github": "https://github.com/kmwook03/FILE-EdoTensei"
       },
       {
         "name": "Linux Kernel Deep Dive",
-        "screenshot": "",
-        "screenshotAlt": "",
+        "screenshot": "images/kernel-lab.png",
+        "screenshotAlt": "Linux Kernel Deep Dive",
         "description": "eBPF와 XDP를 활용해 Linux 커널의 동작과 성능을 실험적으로 분석하는 프로젝트입니다. WSL2와 Raspberry Pi 5에서 스케줄러·페이지 폴트·네트워크·인터럽트를 관측하고, 메모리 정책과 하드웨어 자원이 성능에 미치는 영향을 비교했습니다.",
         "stack": ["C", "Python", "Linux", "eBPF", "XDP"],
         "github": "https://github.com/kmwook03/kernel-deep-dive"
@@ -245,8 +245,8 @@
     "publications": [
       {
         "title": "한글 함수형 프로그래밍 언어 머꼬를 활용한 한글 운영체제 구현",
-        "screenshot": "",
-        "screenshotAlt": "",
+        "screenshot": "images/MKOSP.png",
+        "screenshotAlt": "머꼬OS 논문",
         "authors": "김민욱, 김영훈, 우균",
         "role": "제1저자",
         "venue": "대한전자공학회 하계종합학술대회 논문집",
