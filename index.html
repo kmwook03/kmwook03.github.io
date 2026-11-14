@@ -57,20 +57,23 @@
     .skill-icon { display: inline-flex; flex-shrink: 0; width: 18px; height: 18px; }
     .skill-icon svg { width: 100%; height: 100%; }
     .projects { display: grid; }
-    .project { display: grid; grid-template-columns: minmax(0, 1fr) 360px; grid-template-areas: "body art" "link art"; gap: 18px 48px; align-items: start; padding: 32px 0; }
+    .project { display: grid; grid-template-columns: minmax(0, 1fr) 360px; grid-template-areas: "body art"; gap: 18px 48px; align-items: start; padding: 32px 0; }
     .project:first-child { padding-top: 0; }
     .project + .project { border-top: 1px solid var(--line); }
     .project:last-child { padding-bottom: 0; }
-    .project.project-text-only { grid-template-columns: minmax(0, 1fr); grid-template-areas: "body" "link"; }
+    .project.project-text-only { grid-template-columns: minmax(0, 1fr); grid-template-areas: "body"; }
     .project-text-only .project-body { max-width: 720px; }
     .project-body { grid-area: body; }
     .entry-label { display: block; margin-bottom: 12px; color: var(--muted); }
     h3 { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -.035em; line-height: 1.4; overflow-wrap: anywhere; }
-    .project h3 { margin-bottom: 16px; }
+    .entry-heading { margin-bottom: 16px; }
+    .entry-heading h3 { display: inline; }
+    .entry-heading .project-link { margin-inline-start: 14px; vertical-align: middle; white-space: nowrap; }
     .project p { color: var(--accent); font-size: 14px; margin: 0 0 18px; }
     .project .publication-meta { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
-    .project-link { grid-area: link; justify-self: start; color: var(--accent); font-size: 13px; }
+    .project-link { color: var(--accent); font-size: 13px; }
     .github-link, .publication-link { display: inline-flex; align-items: center; gap: 7px; }
+    .entry-heading .publication-link { display: flex; width: fit-content; margin-inline-start: 0; }
     .github-icon, .dbpia-icon { display: inline-flex; flex-shrink: 0; width: 16px; height: 16px; }
     .dbpia-icon { object-fit: contain; }
     .github-icon svg { display: block; width: 100%; height: 100%; }
@@ -93,7 +96,7 @@
     @media (max-width: 700px) {
       .profile-layout { grid-template-columns: 1fr; gap: 36px; padding: 36px 0; }
       .profile-contacts { margin-top: 18px; }
-      .project { grid-template-columns: minmax(0, 1fr); grid-template-areas: "body" "link" "art"; gap: 20px; }
+      .project { grid-template-columns: minmax(0, 1fr); grid-template-areas: "body" "art"; gap: 20px; }
       .project-art { width: 100%; margin-top: 4px; }
     }
     @media (max-width: 600px) {
@@ -397,10 +400,12 @@
       const tags = element('div', 'tags');
       (item.stack || []).forEach(tech => tags.append(element('span', 'tag', tech)));
       tags.setAttribute('aria-label', '사용 기술');
-      body.append(element('span', 'entry-label mono', item.category || 'Software'), element('h3', '', item.name), element('p', '', item.description), tags);
+      const heading = element('div', 'entry-heading');
       const link = githubLink(item.github, 'project-link', 'GitHub ↗');
       if (link.tagName === 'A') link.setAttribute('aria-label', `${item.name} GitHub 저장소 (새 탭)`);
-      article.append(body, link);
+      heading.append(element('h3', '', item.name), link);
+      body.append(element('span', 'entry-label mono', item.category || 'Software'), heading, element('p', '', item.description), tags);
+      article.append(body);
       if (art) article.append(art);
       else article.classList.add('project-text-only');
       document.getElementById('project-list').append(article);
@@ -410,10 +415,12 @@
       const art = projectArt(paper, 'PAPER');
       const body = element('div', 'project-body');
       const title = paper.title || '논문 제목 입력 예정';
+      const heading = element('div', 'entry-heading');
+      heading.append(element('h3', '', title));
       const metadata = [paper.authors, paper.role, paper.venue, paper.year, paper.pages ? `pp. ${paper.pages}` : ''].filter(Boolean).join(' · ');
       body.append(
         element('span', 'entry-label mono', paper.category || 'Research'),
-        element('h3', '', title),
+        heading,
         element('p', 'publication-meta', metadata || '저자 · 학회·학술지 · 발표 연도 입력 예정'),
         element('p', '', paper.description || '연구 주제와 핵심 결과, 본인이 기여한 내용을 간단히 소개해주세요.')
       );
@@ -438,7 +445,8 @@
         link.rel = 'noopener noreferrer';
         link.setAttribute('aria-label', `${title} 논문 보기 (새 탭)`);
       } else link.setAttribute('aria-disabled', 'true');
-      article.append(body, link);
+      heading.append(link);
+      article.append(body);
       if (art) article.append(art);
       else article.classList.add('project-text-only');
       document.getElementById('publication-list').append(article);
